@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI In Holistic Health Readiness Diagnostic</title>
+  <style>
+    :root {
+      --primary: #0050b3;
+      --primary-light: #e6f0ff;
+      --border: #d0d7e2;
+      --bg: #f5f7fb;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --accent: #10b981;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 32px 16px;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+
+      background-image: url('bgimage.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1100px;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+      padding: 24px 24px 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 8px 0;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      margin: 0 0 24px 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 700px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.8fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+      padding: 20px 20px 24px 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .card-header span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .slider-row {
+      margin: 16px 0;
+      padding: 12px 12px 14px 12px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      background: #fafbff;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .slider-label span:last-child {
+      display: none;
+    }
+
+    .slider-question {
+      font-weight: normal;
+      margin: 0 0 8px 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 6px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    .button-row {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #showResultsBtn,
+    #resetSlidersBtn,
+    #viewDetailsBtn {
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border-radius: 999px;
+      border: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #showResultsBtn {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+    }
+
+    #showResultsBtn:hover {
+      background: #004099;
+    }
+
+    #showResultsBtn:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 4px rgba(37, 99, 235, 0.4);
+    }
+
+    #resetSlidersBtn {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    #resetSlidersBtn:hover {
+      background: #f3f4f6;
+    }
+
+    #viewDetailsBtn {
+      background: #ffffff;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    #viewDetailsBtn:hover {
+      background: var(--primary-light);
+    }
+
+    #results h2 {
+      margin: 0 0 4px 0;
+      font-size: 1.1rem;
+    }
+
+    #summaryText {
+      margin: 0 0 12px 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    #chartContainer {
+      width: 260px;
+      height: 260px;
+      margin: 8px auto 12px auto;
+    }
+
+    #spiderChart {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    #results h3 {
+      margin: 8px 0 4px 0;
+      font-size: 1rem;
+    }
+
+    .code-line {
+      display: none;
+    }
+
+    #interpretationText {
+      margin-top: 8px;
+      white-space: normal;
+      overflow: visible;
+      max-width: 100%;
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .footer {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(209, 213, 219, 0.8);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .footer strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>AI In Holistic Health Readiness Diagnostic</h1>
+    <p class="subtitle">
+      Use the sliders to assess your organization across key dimensions. When you’re ready, click
+      <strong>Show Results</strong> to see your overall profile and interpretation.
+    </p>
+
+    <div class="layout">
+      <!-- LEFT: Questions -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Assessment Questions</h2>
+          <span>Move each slider from 0 (low) to 100 (high)</span>
+        </div>
+        <div id="slidersContainer">
+          <!-- Slider rows will be injected here based on AIquestions.csv -->
+        </div>
+        <div class="button-row">
+          <button id="showResultsBtn">
+            Show Results
+          </button>
+          <button id="resetSlidersBtn">
+            Reset Sliders
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Results -->
+      <div class="card" id="results">
+        <div class="card-header">
+          <h2>Results</h2>
+          <span class="badge">Summary</span>
+        </div>
+        <p id="summaryText">
+          Adjust the sliders, then click “Show Results” to visualize your scores.
+        </p>
+
+        <div id="chartContainer">
+          <canvas id="spiderChart"></canvas>
+        </div>
+
+        <h3>Interpretation</h3>
+        <p class="code-line">
+          Code: <span id="codeDisplay">----</span>
+        </p>
+        <p id="interpretationText">
+          Interpretation will appear here after you click “Show Results.”
+        </p>
+
+        <div class="button-row" style="margin-top: 12px;">
+          <button id="viewDetailsBtn">
+            View Detailed Results
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span><strong>Aon</strong></span>
+      <span>Contact: <a href="mailto:John.Rudoy@aon.com">John.Rudoy@aon.com</a></span>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    const slidersContainer = document.getElementById('slidersContainer');
+    const showResultsBtn = document.getElementById('showResultsBtn');
+    const resetSlidersBtn = document.getElementById('resetSlidersBtn');
+    const viewDetailsBtn = document.getElementById('viewDetailsBtn');
+    const summaryText = document.getElementById('summaryText');
+    const chartCanvas = document.getElementById('spiderChart');
+    const codeDisplay = document.getElementById('codeDisplay');
+    const interpretationText = document.getElementById('interpretationText');
+
+    let chartInstance = null;
+
+    // Each question: { group: number, question: string, dimension: string, sliderElement, valueElement }
+    let questions = [];
+
+    // group -> dimension label (from third column, first occurrence)
+    const groupToDimensionLabel = new Map();
+
+    // Global plain object for code -> text
+    window.codeToTextMap = {};
+
+    // ------------ CSV helpers ------------
+
+    async function loadCSV(path) {
+      try {
+        const response = await fetch(path);
+        if (!response.ok) {
+          console.error('Failed to load ' + path + ':', response.status, response.statusText);
+          return null;
+        }
+        return await response.text();
+      } catch (e) {
+        console.error('Error fetching ' + path + ':', e);
+        return null;
+      }
+    }
+
+    function parseCSVToObjects(csvText) {
+      const lines = csvText.split(/\r?\n/).filter(function(line) {
+        return line.trim() !== '';
+      });
+      if (lines.length < 2) return [];
+
+      const headers = lines[0].split(',').map(function(h) {
+        return h.trim();
+      });
+      const rows = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        if (!line.trim()) continue;
+
+        const cols = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let c = 0; c < line.length; c++) {
+          const ch = line[c];
+          if (ch === '"') {
+            if (inQuotes && line[c + 1] === '"') {
+              current += '"';
+              c++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (ch === ',' && !inQuotes) {
+            cols.push(current);
+            current = '';
+          } else {
+            current += ch;
+          }
+        }
+        cols.push(current);
+
+        const obj = {};
+        headers.forEach(function(h, idx) {
+          obj[h] = (cols[idx] || '').trim();
+        });
+        rows.push(obj);
+      }
+
+      return rows;
+    }
+
+    // ------------ Load questions & build sliders ------------
+
+    async function loadQuestions() {
+      const csvText = await loadCSV('AIquestions.csv');
+      if (!csvText) {
+        alert('Failed to load AIquestions.csv');
+        return;
+      }
+
+      const rows = parseCSVToObjects(csvText);
+      console.log('Parsed AIquestions rows:', rows);
+
+      if (!rows.length) {
+        alert('AIquestions.csv has no data rows.');
+        return;
+      }
+
+      rows.forEach(function(row, index) {
+        // Expect: group, question, dimension
+        const groupStr = row.group;
+        const group = Number(groupStr);
+        const questionText = row.question || ('Question ' + (index + 1));
+        const dimensionText = row.dimension || '';
+
+        if (Number.isNaN(group)) {
+          console.warn('Row ' + (index + 2) + ': invalid group value "' + groupStr + '". Skipping.');
+          return;
+        }
+
+        if (!groupToDimensionLabel.has(group)) {
+          groupToDimensionLabel.set(group, dimensionText || ('Dimension ' + group));
+        }
+
+        const sliderRow = document.createElement('div');
+        sliderRow.className = 'slider-row';
+
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'slider-label';
+
+        const labelSpan = document.createElement('span');
+        labelSpan.textContent = 'Question ' + (index + 1);
+
+        const valueSpan = document.createElement('span');
+        valueSpan.textContent = '50'; // hidden via CSS
+
+        labelDiv.appendChild(labelSpan);
+        labelDiv.appendChild(valueSpan);
+
+        const questionP = document.createElement('p');
+        questionP.className = 'slider-question';
+        questionP.textContent = questionText;
+
+        const sliderInput = document.createElement('input');
+        sliderInput.type = 'range';
+        sliderInput.min = '0';
+        sliderInput.max = '100';
+        sliderInput.value = '50';
+
+        const questionObj = {
+          group: group,
+          question: questionText,
+          dimension: dimensionText,
+          sliderElement: sliderInput,
+          valueElement: valueSpan
+        };
+        questions.push(questionObj);
+
+        sliderInput.addEventListener('input', function() {
+          questionObj.valueElement.textContent = sliderInput.value;
+        });
+
+        sliderRow.appendChild(labelDiv);
+        sliderRow.appendChild(questionP);
+        sliderRow.appendChild(sliderInput);
+
+        slidersContainer.appendChild(sliderRow);
+      });
+
+      console.log('Built questions array:', questions);
+      console.log('groupToDimensionLabel map:', Array.from(groupToDimensionLabel.entries()));
+    }
+
+    // ------------ Load descriptions (H/L codes) ------------
+
+    async function loadDescriptions() {
+      const csvText = await loadCSV('descriptions1.csv');
+      if (!csvText) {
+        console.warn('descriptions1.csv not loaded; interpretations disabled.');
+        return;
+      }
+
+      const rows = parseCSVToObjects(csvText);
+      console.log('Parsed descriptions rows:', rows);
+
+      rows.forEach(function(row, idx) {
+        const normalized = {};
+        Object.keys(row).forEach(function(k) {
+          const lowerKey = k.toLowerCase();
+          normalized[lowerKey] = (row[k] || '').trim();
+        });
+
+        const rawCode = normalized.code;
+        const rawText = normalized.text;
+
+        if (!rawCode) {
+          console.warn('descriptions1.csv row ' + (idx + 2) + ': missing code. Row:', row);
+          return;
+        }
+
+        const key = String(rawCode).trim().toUpperCase();
+        window.codeToTextMap[key] = rawText;
+      });
+
+      console.log('FINAL codeToTextMap keys:', Object.keys(window.codeToTextMap));
+    }
+
+    // ------------ Calculations ------------
+
+    function calculateGroupAverages() {
+      const groupStats = new Map();
+
+      questions.forEach(function(q) {
+        const v = Number(q.sliderElement.value);
+        const g = q.group;
+
+        if (!groupStats.has(g)) {
+          groupStats.set(g, { sum: 0, count: 0 });
+        }
+        const stat = groupStats.get(g);
+        stat.sum += v;
+        stat.count += 1;
+      });
+
+      const sortedGroups = Array.from(groupStats.keys()).sort(function(a, b) {
+        return a - b;
+      });
+
+      const labels = sortedGroups.map(function(g) {
+        return groupToDimensionLabel.get(g) || ('Dimension ' + g);
+      });
+      const averages = sortedGroups.map(function(g) {
+        const stat = groupStats.get(g);
+        return stat.count > 0 ? stat.sum / stat.count : 0;
+      });
+
+      console.log('Calculated group averages:', { labels: labels, averages: averages });
+      return { labels: labels, averages: averages };
+    }
+
+    function getCodeFromAverages(averages) {
+      const code = averages.map(function(avg) {
+        return avg >= 50 ? 'H' : 'L';
+      }).join('');
+      console.log('Computed H/L code from averages:', code);
+      return code;
+    }
+
+    // ------------ Interpretation ------------
+
+    function updateInterpretation(code) {
+      const key = String(code || '').trim().toUpperCase();
+      codeDisplay.textContent = key; // hidden but updated
+
+      const lookedUp = window.codeToTextMap[key];
+      console.log('updateInterpretation lookup:', { key: key, value: lookedUp });
+
+      if (lookedUp) {
+        interpretationText.textContent = lookedUp;
+      } else {
+        console.warn(
+          'No interpretation found for code:',
+          key,
+          'Available codes:',
+          Object.keys(window.codeToTextMap)
+        );
+        interpretationText.textContent =
+          'No specific interpretation found for this pattern.';
+      }
+    }
+
+    // ------------ Chart ------------
+
+    function createOrUpdateChart(labels, data) {
+      summaryText.textContent =
+        'Average scores per dimension are shown in the chart below.';
+
+      if (!chartInstance) {
+        chartInstance = new Chart(chartCanvas, {
+          type: 'radar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Average Scores',
+              data: data,
+              backgroundColor: 'rgba(54, 162, 235, 0.15)',
+              borderColor: '#2563eb',
+              borderWidth: 2,
+              pointBackgroundColor: '#2563eb',
+              pointRadius: 3
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                beginAtZero: true,
+                suggestedMin: 0,
+                suggestedMax: 100,
+                ticks: {
+                  stepSize: 20,
+                  display: true,
+                  font: { size: 10 }
+                },
+                pointLabels: {
+                  font: { size: 11 },
+                  color: '#374151'
+                },
+                grid: {
+                  color: '#e5e7eb'
+                },
+                angleLines: {
+                  color: '#e5e7eb'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: true,
+                labels: { font: { size: 10 } }
+              }
+            }
+          }
+        });
+      } else {
+        chartInstance.data.labels = labels;
+        chartInstance.data.datasets[0].data = data;
+        chartInstance.update();
+      }
+    }
+
+    // ------------ Reset ------------
+
+    function resetSliders() {
+      questions.forEach(function(q) {
+        q.sliderElement.value = 50;
+        if (q.valueElement) {
+          q.valueElement.textContent = '50';
+        }
+      });
+
+      if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+      }
+
+      summaryText.textContent =
+        'Adjust the sliders, then click “Show Results” to visualize your scores.';
+      interpretationText.textContent =
+        'Interpretation will appear here after you click “Show Results.”';
+      codeDisplay.textContent = '----';
+    }
+
+    // ------------ Navigation to details page ------------
+
+    function viewDetailedResults() {
+      if (!questions.length) {
+        alert('Questions are not loaded yet.');
+        return;
+      }
+
+      const result = calculateGroupAverages();
+      const labels = result.labels;
+      const averages = result.averages;
+
+      if (!labels.length) {
+        alert('No valid group data to display.');
+        return;
+      }
+
+      const code = getCodeFromAverages(averages);
+
+      // Encode for URL
+      const averagesParam = encodeURIComponent(JSON.stringify(averages));
+      const labelsParam = encodeURIComponent(JSON.stringify(labels));
+      const codeParam = encodeURIComponent(code);
+
+      const url = `results.html?averages=${averagesParam}&labels=${labelsParam}&code=${codeParam}`;
+      window.location.href = url;
+    }
+
+    // ------------ Button handler ------------
+
+    function showResults() {
+      if (!questions.length) {
+        alert('Questions are not loaded yet.');
+        return;
+      }
+
+      const result = calculateGroupAverages();
+      const labels = result.labels;
+      const averages = result.averages;
+
+      if (!labels.length) {
+        alert('No valid group data to display.');
+        return;
+      }
+
+      createOrUpdateChart(labels, averages);
+
+      const code = getCodeFromAverages(averages);
+      updateInterpretation(code);
+    }
+
+    // ------------ Init ------------
+
+    (async function init() {
+      await loadQuestions();     // AIquestions.csv
+      await loadDescriptions();  // descriptions1.csv
+      showResultsBtn.addEventListener('click', showResults);
+      resetSlidersBtn.addEventListener('click', resetSliders);
+      viewDetailsBtn.addEventListener('click', viewDetailedResults);
+    })();
+  </script>
+</body>
+</html>

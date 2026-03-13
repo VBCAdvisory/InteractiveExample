@@ -4,15 +4,15 @@ HHHL,"You have integrated AI extensively across your operations and have even us
 
 Next Line Test"
 HHLH,"You have integrated AI extensively across your operations and educated your employees effectively. However, you are missing an opportunity to use AI to improve employee holistic health."
-HHLL,HHLL
-HLHH,HLHH
-HLHL,HLHL
-HLLH,HLLH
-HLLL,HLLL
-LHHH,LHHH
-LHHL,LHHL
-LHLL,LHLL
-LHLH,LHLH
-LLHH,LLHH
-LLHL,LLHL
-LLLL,Added something here for testing purposes
+HHLL,"You have integrated AI extensively across your operations but without a beter approach to education and holistic health support, you risk negatively impacting your employees"
+HLHH,"You are using AI effectively from a client-facing perspective, but your failure to integrate it into back office operations may cause clients to be skeptical of your commitment to the technology"
+HLHL,"You are using AI effectively from a client-facing perspective, but your failure to integrate it into back office operations or to support employee health may cause clients to be skeptical of your commitment to the technology"
+HLLH,"You are using AI effectively from a client-facing perspective, but the lack of employee education and failure to integrate it into back office operations may cause clients to be skeptical of your commitment to the technology"
+HLLL,"You are using AI effectively from a client-facing perspective, but you are not integrating it into any other aspect of your enterprise, nor are you effectively education your employees; clients may be skeptical of your commitment, and employees may not effectively deploy AI tools or feel supported in adapting to an AI-enabled workplace "
+LHHH,"You are deploying AI to run your business effectively and doing an admirable job preparing your employees for an AI-enabled workplace, but not deploying AI for client-facing services can mark your company as a laggard "
+LHHL,"You are deploying AI to run your business effectively but you can do a better job helping your employees prepare for an AI-enabled workplace. In addition, finding ways to deploy AI for client-facing activities can demonstrate your commitment to growth more effectively than maintaining AI as an internal-only tool"
+LHLL,"You are deploying AI to run your business more effectively but without more education and more client-facing use cases, you threaten to severely underutilize AI "
+LHLH,"You are deploying AI to run your business more effectively but without more education and more client-facing use cases, you threaten to severely underutilize AI "
+LLHH,"You are effectively preparing your employees to prepare for an AI-enabled workforce, but you are making little use of AI in your actual business operations. The longer you wait, the farther you fall behind"
+LLHL,"You are effectively preparing your employees to prepare for an AI-enabled workforce, but you are making little use of AI in your actual business operations. The longer you wait, the farther you fall behind"
+LLLL,"You have done little to integrate AI into your business. The longer you wait, the farther you fall behind"

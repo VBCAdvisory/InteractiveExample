@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Readiness – Detailed Results</title>
+  <style>
+    :root {
+      --primary: #0050b3;
+      --primary-light: #e6f0ff;
+      --border: #d0d7e2;
+      --bg: #f5f7fb;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --opp-color: #10b981;   /* blue-green */
+      --risk-color: #a85541;  /* purplish-red / magenta-ish */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 32px 16px;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+
+      background-image: url('bgimage.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1100px;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+      padding: 24px 24px 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin: 0 0 6px 0;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      margin: 0 0 20px 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 700px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+      padding: 20px 20px 24px 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .card-header span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    #chartContainer {
+      width: 280px;
+      height: 280px;
+      margin: 8px auto 0 auto;
+    }
+
+    #spiderChart {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    #detailText {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      white-space: normal;
+    }
+
+    .risk-opp-grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .risk-opp-block h4 {
+      margin: 0 0 6px 0;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-main);
+    }
+
+    .color-square {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    .color-square.opp {
+      background: var(--opp-color);
+    }
+
+    .color-square.risk {
+      background: var(--risk-color);
+    }
+
+    .risk-opp-text {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-main);
+      white-space: normal;
+    }
+
+    .pdf-link {
+      margin-top: 18px;
+      font-size: 0.9rem;
+    }
+
+    .pdf-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .pdf-link a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(209, 213, 219, 0.8);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .footer strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      font-size: 0.9rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <div>
+        <h1>AI Readiness – Detailed Results</h1>
+        <p class="subtitle">
+          This page provides a more detailed view of your scores and tailored commentary
+          based on your overall profile.
+        </p>
+      </div>
+      <a href="index.html" class="back-link">← Back to assessment</a>
+    </div>
+
+    <div class="layout">
+      <!-- LEFT: Spider chart -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Profile Overview</h2>
+          <span class="badge">Spider Chart</span>
+        </div>
+        <div id="chartContainer">
+          <canvas id="spiderChart"></canvas>
+        </div>
+      </div>
+
+      <!-- RIGHT: Text from secondpage.csv -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Interpretive Commentary</h2>
+          <span>Based on your overall readiness pattern</span>
+        </div>
+        <div id="detailText">
+          Loading detailed commentary…
+        </div>
+
+        <!-- Risk / Opportunity section -->
+        <div class="risk-opp-grid">
+          <div class="risk-opp-block">
+            <h4>
+              <span class="color-square opp"></span>
+              <span>Opportunity</span>
+            </h4>
+            <p id="oppText" class="risk-opp-text"></p>
+          </div>
+          <div class="risk-opp-block">
+            <h4>
+              <span class="color-square risk"></span>
+              <span>Risk</span>
+            </h4>
+            <p id="riskText" class="risk-opp-text"></p>
+          </div>
+        </div>
+
+        <!-- PDF link -->
+        <div class="pdf-link">
+          <a href="report.pdf" target="_blank" rel="noopener">
+            View full report (PDF)
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span><strong>Aon</strong></span>
+      <span>Contact: <a href="mailto:John.Rudoy@aon.com">John.Rudoy@aon.com</a></span>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    const chartCanvas = document.getElementById('spiderChart');
+    const detailTextEl = document.getElementById('detailText');
+    const oppTextEl = document.getElementById('oppText');
+    const riskTextEl = document.getElementById('riskText');
+
+    // ---- URL parameter helpers ----
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        averages: params.get('averages'),
+        labels: params.get('labels'),
+        code: params.get('code')
+      };
+    }
+
+    // ---- CSV helper for secondpage.csv ----
+    async function loadCSV(path) {
+      try {
+        const response = await fetch(path);
+        if (!response.ok) {
+          console.error('Failed to load ' + path + ':', response.status, response.statusText);
+          return null;
+        }
+        return await response.text();
+      } catch (e) {
+        console.error('Error fetching ' + path + ':', e);
+        return null;
+      }
+    }
+
+    function parseCSVToObjects(csvText) {
+      const lines = csvText.split(/\r?\n/).filter(function(line) {
+        return line.trim() !== '';
+      });
+      if (lines.length < 2) return [];
+
+      const headers = lines[0].split(',').map(function(h) {
+        return h.trim();
+      });
+      const rows = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        if (!line.trim()) continue;
+
+        const cols = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let c = 0; c < line.length; c++) {
+          const ch = line[c];
+          if (ch === '"') {
+            if (inQuotes && line[c + 1] === '"') {
+              current += '"';
+              c++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (ch === ',' && !inQuotes) {
+            cols.push(current);
+            current = '';
+          } else {
+            current += ch;
+          }
+        }
+        cols.push(current);
+
+        const obj = {};
+        headers.forEach(function(h, idx) {
+          obj[h] = (cols[idx] || '').trim();
+        });
+        rows.push(obj);
+      }
+
+      return rows;
+    }
+
+    async function loadSecondPageText(code) {
+      const csvText = await loadCSV('secondpage1.csv');
+      if (!csvText) {
+        detailTextEl.textContent = 'Unable to load detailed commentary.';
+        oppTextEl.textContent = '';
+        riskTextEl.textContent = '';
+        return;
+      }
+
+      const rows = parseCSVToObjects(csvText);
+      const codeUpper = String(code || '').trim().toUpperCase();
+
+      let found = null;
+      rows.forEach(function(row) {
+        const rowCode = (row.code || '').trim().toUpperCase();
+        if (rowCode === codeUpper && !found) {
+          found = row;
+        }
+      });
+
+      if (found) {
+        const mainText = found.text || '';
+        const riskText = found.Risk || found.risk || '';
+        const oppText = found.Opportunity || found.opportunity || '';
+
+        detailTextEl.textContent = mainText || 'No detailed commentary text provided for this pattern.';
+        oppTextEl.textContent = oppText || 'No specific opportunity commentary provided.';
+        riskTextEl.textContent = riskText || 'No specific risk commentary provided.';
+      } else {
+        detailTextEl.textContent =
+          'No specific detailed commentary was found for this pattern. Please contact the Aon team for a tailored interpretation.';
+        oppTextEl.textContent = '';
+        riskTextEl.textContent = '';
+      }
+    }
+
+    // ---- Chart ----
+    let chartInstance = null;
+
+    function createChart(labels, data) {
+      if (!chartCanvas) return;
+
+      chartInstance = new Chart(chartCanvas, {
+        type: 'radar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Average Scores',
+            data: data,
+            backgroundColor: 'rgba(54, 162, 235, 0.15)',
+            borderColor: '#2563eb',
+            borderWidth: 2,
+            pointBackgroundColor: '#2563eb',
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              beginAtZero: true,
+              suggestedMin: 0,
+              suggestedMax: 100,
+              ticks: {
+                stepSize: 20,
+                display: true,
+                font: { size: 10 }
+              },
+              pointLabels: {
+                font: { size: 11 },
+                color: '#374151'
+              },
+              grid: {
+                color: '#e5e7eb'
+              },
+              angleLines: {
+                color: '#e5e7eb'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              labels: { font: { size: 10 } }
+            }
+          }
+        }
+      });
+    }
+
+    // ---- Init ----
+    (async function init() {
+      const params = getQueryParams();
+
+      let averages = [];
+      let labels = [];
+      let code = '';
+
+      try {
+        if (params.averages) {
+          averages = JSON.parse(decodeURIComponent(params.averages));
+        }
+        if (params.labels) {
+          labels = JSON.parse(decodeURIComponent(params.labels));
+        }
+        if (params.code) {
+          code = decodeURIComponent(params.code);
+        }
+      } catch (e) {
+        console.error('Error parsing query parameters:', e);
+      }
+
+      if (!averages.length || !labels.length) {
+        detailTextEl.textContent =
+          'No results were found in the URL. Please return to the assessment page and generate results again.';
+        oppTextEl.textContent = '';
+        riskTextEl.textContent = '';
+        return;
+      }
+
+      createChart(labels, averages);
+      await loadSecondPageText(code);
+    })();
+  </script>
+</body>
+</html>
