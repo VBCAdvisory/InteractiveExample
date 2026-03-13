@@ -28,7 +28,6 @@
       display: flex;
       justify-content: center;
 
-      /* Background image */
       background-image: url('bgimage.jpg');
       background-size: cover;
       background-repeat: no-repeat;
@@ -115,7 +114,6 @@
       color: var(--text-main);
     }
 
-    /* Hide numeric value next to the label */
     .slider-label span:last-child {
       display: none;
     }
@@ -164,7 +162,8 @@
     }
 
     #showResultsBtn,
-    #resetSlidersBtn {
+    #resetSlidersBtn,
+    #viewDetailsBtn {
       padding: 10px 20px;
       font-size: 0.95rem;
       cursor: pointer;
@@ -201,6 +200,16 @@
       background: #f3f4f6;
     }
 
+    #viewDetailsBtn {
+      background: #ffffff;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    #viewDetailsBtn:hover {
+      background: var(--primary-light);
+    }
+
     #results h2 {
       margin: 0 0 4px 0;
       font-size: 1.1rem;
@@ -215,7 +224,7 @@
     #chartContainer {
       width: 260px;
       height: 260px;
-      margin: 8px auto 16px auto;
+      margin: 8px auto 12px auto;
     }
 
     #spiderChart {
@@ -224,12 +233,12 @@
     }
 
     #results h3 {
-      margin: 0 0 4px 0;
+      margin: 8px 0 4px 0;
       font-size: 1rem;
     }
 
     .code-line {
-      display: none; /* keep hidden */
+      display: none;
     }
 
     #interpretationText {
@@ -252,7 +261,6 @@
       font-weight: 600;
     }
 
-    /* Footer */
     .footer {
       margin-top: 8px;
       padding-top: 8px;
@@ -330,6 +338,12 @@
         <p id="interpretationText">
           Interpretation will appear here after you click “Show Results.”
         </p>
+
+        <div class="button-row" style="margin-top: 12px;">
+          <button id="viewDetailsBtn">
+            View Detailed Results
+          </button>
+        </div>
       </div>
     </div>
 
@@ -346,6 +360,7 @@
     const slidersContainer = document.getElementById('slidersContainer');
     const showResultsBtn = document.getElementById('showResultsBtn');
     const resetSlidersBtn = document.getElementById('resetSlidersBtn');
+    const viewDetailsBtn = document.getElementById('viewDetailsBtn');
     const summaryText = document.getElementById('summaryText');
     const chartCanvas = document.getElementById('spiderChart');
     const codeDisplay = document.getElementById('codeDisplay');
@@ -468,7 +483,7 @@
         labelSpan.textContent = 'Question ' + (index + 1);
 
         const valueSpan = document.createElement('span');
-        valueSpan.textContent = '50'; // hidden via CSS, kept for potential future use
+        valueSpan.textContent = '50'; // hidden via CSS
 
         labelDiv.appendChild(labelSpan);
         labelDiv.appendChild(valueSpan);
@@ -510,7 +525,6 @@
     // ------------ Load descriptions (H/L codes) ------------
 
     async function loadDescriptions() {
-      // Using descriptions1.csv as before
       const csvText = await loadCSV('descriptions1.csv');
       if (!csvText) {
         console.warn('descriptions1.csv not loaded; interpretations disabled.');
@@ -587,7 +601,7 @@
 
     function updateInterpretation(code) {
       const key = String(code || '').trim().toUpperCase();
-      codeDisplay.textContent = key; // still update, though hidden
+      codeDisplay.textContent = key; // hidden but updated
 
       const lookedUp = window.codeToTextMap[key];
       console.log('updateInterpretation lookup:', { key: key, value: lookedUp });
@@ -670,7 +684,6 @@
     // ------------ Reset ------------
 
     function resetSliders() {
-      // Reset each slider to 50
       questions.forEach(function(q) {
         q.sliderElement.value = 50;
         if (q.valueElement) {
@@ -678,7 +691,6 @@
         }
       });
 
-      // Clear chart and interpretation text back to initial state
       if (chartInstance) {
         chartInstance.destroy();
         chartInstance = null;
@@ -689,6 +701,34 @@
       interpretationText.textContent =
         'Interpretation will appear here after you click “Show Results.”';
       codeDisplay.textContent = '----';
+    }
+
+    // ------------ Navigation to details page ------------
+
+    function viewDetailedResults() {
+      if (!questions.length) {
+        alert('Questions are not loaded yet.');
+        return;
+      }
+
+      const result = calculateGroupAverages();
+      const labels = result.labels;
+      const averages = result.averages;
+
+      if (!labels.length) {
+        alert('No valid group data to display.');
+        return;
+      }
+
+      const code = getCodeFromAverages(averages);
+
+      // Encode for URL
+      const averagesParam = encodeURIComponent(JSON.stringify(averages));
+      const labelsParam = encodeURIComponent(JSON.stringify(labels));
+      const codeParam = encodeURIComponent(code);
+
+      const url = `results.html?averages=${averagesParam}&labels=${labelsParam}&code=${codeParam}`;
+      window.location.href = url;
     }
 
     // ------------ Button handler ------------
@@ -721,6 +761,7 @@
       await loadDescriptions();  // descriptions1.csv
       showResultsBtn.addEventListener('click', showResults);
       resetSlidersBtn.addEventListener('click', resetSliders);
+      viewDetailsBtn.addEventListener('click', viewDetailedResults);
     })();
   </script>
 </body>
